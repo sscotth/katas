@@ -7,8 +7,8 @@ describe('tagged template strings, are an advanced form of template strings', fu
     function tagFunction(s) {
       return s.toString();
     }
-    var evaluated = tagFunc `template string`;
-    assert.equal(evaluated, 'template string');
+    var evaluated = tagFunction`template string`;
+    assert.strictEqual(evaluated, 'template string');
   });
   
   describe('the function can access each part of the template', function() {
@@ -20,12 +20,12 @@ describe('tagged template strings, are an advanced form of template strings', fu
       }
 
       it('the strings are an array', function() {
-        var result = 'template string';
+        var result = ['template string'];
         assert.deepEqual(tagFunction`template string`, result);
       });
 
       it('expressions are NOT passed to it', function() {
-        var tagged = tagFunction`one${23}`; 
+        var tagged = tagFunction`one${23}two`; 
         assert.deepEqual(tagged, ['one', 'two']);
       });
 
@@ -37,22 +37,22 @@ describe('tagged template strings, are an advanced form of template strings', fu
       var two = 2;
       var three = 3;
       it('the 2nd parameter contains the first expression`s value', function() {
-        function firstValueOnly(strings, first_value) { 
+        function firstValueOnly(strings, firstValue) { 
           return firstValue;
         }
-        assert.equal(firstValueOnly`uno ${one}, dos ${two}`, 1);
+        assert.strictEqual(firstValueOnly`uno ${one}, dos ${two}`, 1);
       });
       
       it('the 3rd parameter contains the second expression`s value', function() {
-        function firstValueOnly(strings, firstValue, ____) { 
+        function firstValueOnly(strings, firstValue, secondValue) { 
           return secondValue;
         }
-        assert.equal(firstValueOnly`uno ${one}, dos ${two}`, 2);
+        assert.strictEqual(firstValueOnly`uno ${one}, dos ${two}`, 2);
       });
       
       it('using ES6 rest syntax, all values can be accessed via one variable', function() {
         function valuesOnly(stringsArray, ...allValues) { // using the new ES6 rest syntax
-          return;
+          return allValues;
         }
         assert.deepEqual(valuesOnly`uno=${one}, dos=${two}, tres=${three}`, [1, 2, 3]);
       });
