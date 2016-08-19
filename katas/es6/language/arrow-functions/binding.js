@@ -5,12 +5,12 @@ class LexicallyBound {
   
   getFunction() {
     return () => {
-      return new LexicallyBound();
+      return this;
     }
   }
   
   getArgumentsFunction() {
-    return function() {return arguments}
+    return () => {return arguments}
   }
   
 }
@@ -28,7 +28,7 @@ describe('arrow functions have lexical `this`, no dynamic `this`', () => {
     var bound = new LexicallyBound();
     var fn = bound.getFunction();
     var anotherObj = {};
-    var expected = anotherObj;
+    var expected = bound;
     
     assert.strictEqual(fn.call(anotherObj), expected);
   });
@@ -37,7 +37,7 @@ describe('arrow functions have lexical `this`, no dynamic `this`', () => {
     var bound = new LexicallyBound();
     var fn = bound.getArgumentsFunction();
     
-    assert.equal(fn(1, 2).length, 0);
+    assert.strictEqual(fn(1, 2).length, 0);
   });
   
 });
